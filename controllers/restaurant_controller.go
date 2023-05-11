@@ -29,6 +29,16 @@ func GetRestaurantController(c echo.Context) error {
 	})
 }
 
+func GetRestaurantById(id string) (*models.Restaurant, error) {
+	var restaurant models.Restaurant
+	result := configs.DB.First(&restaurant, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &restaurant, nil
+}
+
 func InsertRestaurant(c echo.Context) error {
 	var insertUser models.Restaurant
 	c.Bind(&insertUser)
