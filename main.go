@@ -1,6 +1,10 @@
 package main
 
 import (
+	"os"
+	"restaurant/configs"
+	"restaurant/routes"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -11,9 +15,13 @@ type BaseResponse struct {
 }
 
 func main() {
-	e := echo.New()
-	e.GET("/restaurants", GetRestaurantsController)
-	e.Start(":8000")
+	configs.ConnectDatabase()
+	e := routes.InitRoute()
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	e.Start(":" + port)
 
 }
 
