@@ -26,6 +26,7 @@ func InitRoute() *echo.Echo {
 		return c.JSON(http.StatusOK, restaurant)
 	})
 	e.POST("/restaurants", controllers.InsertRestaurant)
+	e.POST("/menus/:id", controllers.InsertNewMenuByRestaurantId)
 
 	//Menu
 

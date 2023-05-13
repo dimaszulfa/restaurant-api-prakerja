@@ -31,7 +31,9 @@ func GetRestaurantController(c echo.Context) error {
 
 func GetRestaurantById(id string) (*models.Restaurant, error) {
 	var restaurant models.Restaurant
-	result := configs.DB.First(&restaurant, id)
+	// result := configs.DB.First(&restaurant, id)
+	result := configs.DB.First(&restaurant, id).Model(&models.Restaurant{}).Preload("MenuItem").Find(&restaurant)
+
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -44,9 +46,6 @@ func InsertRestaurant(c echo.Context) error {
 	c.Bind(&insertUser)
 	fmt.Println(insertUser)
 
-	// logic bisnis
-	// di cek database ada ?
-	// 409
 	result := configs.DB.First(&models.Restaurant{}, "name = ?", insertUser.Name)
 	if result.Error != gorm.ErrRecordNotFound {
 		return c.JSON(http.StatusConflict, models.BaseResponse{
